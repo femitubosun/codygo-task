@@ -1,9 +1,7 @@
 {
   "app": "npx ts-node --prefer-ts-exts bin/codygo-task.ts",
   "watch": {
-    "include": [
-      "**"
-    ],
+    "include": ["**"],
     "exclude": [
       "README.md",
       "cdk*.json",
@@ -19,10 +17,7 @@
   "context": {
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk/core:checkSecretUsage": true,
-    "@aws-cdk/core:target-partitions": [
-      "aws",
-      "aws-cn"
-    ],
+    "@aws-cdk/core:target-partitions": ["aws", "aws-cn"],
     "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
     "@aws-cdk/aws-ec2:uniqueImdsv2TemplateName": true,
     "@aws-cdk/aws-ecs:arnFormatIncludesClusterName": true,
@@ -63,6 +58,24 @@
     "@aws-cdk/aws-cloudwatch-actions:changeLambdaPermissionLogicalIdForLambdaAction": true,
     "@aws-cdk/aws-codepipeline:crossAccountKeysDefaultValueToFalse": true,
     "@aws-cdk/aws-codepipeline:defaultPipelineTypeToV2": true,
-    "@aws-cdk/aws-kms:reduceCrossAccountRegionPolicyScope": true
+    "@aws-cdk/aws-kms:reduceCrossAccountRegionPolicyScope": true,
+    "globals": {
+      "appName": "femis-codygo-backend-app",
+      "region": "eu-central-1",
+      "secureGroupName": "femi-test-codygo-document-uploaders",
+      "apiKey": "CODYGO-123-123"
+    },
+    "environments": [
+      {
+        "environment": "develop",
+        "branchName": "develop",
+        "accountId": "730335226711"
+      },
+      {
+        "environment": "production",
+        "branchName": "main",
+        "accountId": "730335226711"
+      }
+    ]
   }
 }
