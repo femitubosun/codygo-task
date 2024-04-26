@@ -56,7 +56,7 @@ class CodygoBackendTaskApp {
         description: "Codygo backend task",
       };
 
-      const dataStack = new CodygoTaskStack(
+      new CodygoTaskStack(
         app,
         `${context.appName}-data-stack-${context.environment}`,
         stackProps,

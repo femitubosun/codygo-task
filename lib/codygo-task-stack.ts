@@ -19,7 +19,7 @@ import * as cwLogs from "aws-cdk-lib/aws-logs";
 export class CodygoTaskStack extends Stack {
   private secureGroup: iam.Group;
   private documentStorage: s3.Bucket;
-  private wordsCache: dynamoDb.Table;
+  private wordsCache: dynamoDb.TableV2;
 
   constructor(
     scope: Construct,
@@ -267,13 +267,14 @@ export class CodygoTaskStack extends Stack {
    * @param context The context containing configuration for the CDK deployment.
    * @returns An instance of the DynamoDB table created.
    */
-  #createWordsTable(context: AppContext): dynamoDb.Table {
-    return new dynamoDb.Table(this, "wordsCache", {
+  #createWordsTable(context: AppContext): dynamoDb.TableV2 {
+    return new dynamoDb.TableV2(this, "wordsCache", {
       tableName: `${context.appName}-words-cache-${context.environment}`,
       partitionKey: {
         name: "word",
         type: dynamoDb.AttributeType.STRING,
       },
+      billing: dynamoDb.Billing.onDemand(),
     });
   }
 

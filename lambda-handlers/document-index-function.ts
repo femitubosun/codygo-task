@@ -1,7 +1,6 @@
 import { S3Handler } from "aws-lambda";
 import * as logUtils from "/opt/logUtils";
 import * as docUtils from "/opt/documentUtils";
-
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
@@ -9,13 +8,12 @@ import {
   GetCommand,
   UpdateCommand,
   BatchWriteCommand,
-  PutCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 import { Readable } from "stream";
 import { DynamoDBWriteRequest, PutDocumentRequest } from "types";
 
-export const handler: S3Handler = async (event, context) => {
+export const handler: S3Handler = async (event, _context) => {
   try {
     const s3Client = new S3Client();
     const dynamoDbClient = new DynamoDBClient();
@@ -57,6 +55,10 @@ export const handler: S3Handler = async (event, context) => {
     logUtils.logInfo(`Indexing to ${tableName}`);
 
     const uniqueWords = docUtils.getUniqueWords(rawText.toLowerCase());
+
+    logUtils.logInfo(
+      `Attempting to index ${uniqueWords.size} words from ${key}`
+    );
 
     const indexCount = await writeWordsIntoDb({
       words: uniqueWords,
@@ -135,7 +137,7 @@ const executeBatchWrite = async (
   tableName: string,
   putCommands: Array<PutDocumentRequest>
 ) => {
-  const CHUNK_SIZE = 100;
+  const CHUNK_SIZE = 25;
 
   for (let i = 0; i < putCommands.length; i += CHUNK_SIZE) {
     const chunk = putCommands.slice(i, i + CHUNK_SIZE);
@@ -149,6 +151,7 @@ const executeBatchWrite = async (
     try {
       await client.send(batchWriteCommand);
     } catch (err: any) {
+      logUtils.logError(err);
       logUtils.logError(`Error indexing chunk.\n${chunk}`);
     }
   }

@@ -1,14 +1,27 @@
-# Welcome to your CDK TypeScript project
+# Codygo Backend Task
 
-This is a blank project for CDK development with TypeScript.
+## Uploading a Document
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+`aws s3 cp "./Sample 1MB.docx" s3://femis-codygo-backend-app-document-storage-production/ --profile test_dev`
 
-## Useful commands
+Where `test_dev` is profile of an IAM user who is a part of the `femi-test-codygo-document-uploaders` group.
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+## Searching a Document
+
+### Request
+
+`curl -H "x-api-key:CODYGO-123-123" "https://j5nmvyljm8.execute-api.eu-central-1.amazonaws.com/search?words=machine,or"`
+
+### Response
+
+```json
+[
+  "https://h3bomvuju7xzfugrzd2m262oae0rbnng.lambda-url.eu-central-1.on.aws/?fileName=Day%201.docx",
+  "https://h3bomvuju7xzfugrzd2m262oae0rbnng.lambda-url.eu-central-1.on.aws/?fileName=Day%206.docx",
+  "https://h3bomvuju7xzfugrzd2m262oae0rbnng.lambda-url.eu-central-1.on.aws/?fileName=Day%205.docx"
+]
+```
+
+### Download
+
+`curl -o fileName.docx "https://h3bomvuju7xzfugrzd2m262oae0rbnng.lambda-url.eu-central-1.on.aws/?fileName=Day%205.docx"`

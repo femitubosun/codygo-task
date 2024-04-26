@@ -35,7 +35,7 @@ export const handler: Handler = async (event, _context) => {
     });
 
     const arr = Array.from(referenceDocs).map(
-      (doc) => `${downloadUrl}${encodeURIComponent(doc)}`
+      (doc) => `${downloadUrl}?fileName=${encodeURIComponent(doc)}`
     );
 
     return {

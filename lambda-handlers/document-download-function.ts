@@ -7,7 +7,7 @@ export const handler = awslambda.streamifyResponse(
   async (event, responseStream, _context) => {
     try {
       const s3Client = new S3Client();
-      const bucketName = `${process.env.APP_NAME}-${process.env.ENV}`;
+      const bucketName = `${process.env.APP_NAME}-document-storage-${process.env.ENV}`;
       const fileName = event.queryStringParameters?.fileName;
 
       if (!fileName) {
